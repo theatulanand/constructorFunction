@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product List</title>
+    <style>
+        #container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-left: 15px;
+        }
+
+        #product {
+            width: 300px;
+            border: 3px solid red;
+            text-align: center;
+            border-radius: 15px;
+            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        }
+
+        #img {
+            width: 200px;
+            height: 300px;
+        }
+
+        h3 {
+            height: 30px;
+        }
+
+        #remove {
+            background-color: red;
+            color: white;
+            border: none;
+            width: 280px;
+            font-size: 25px;
+            margin-bottom: 5px;
+            border-radius: 12px;
+        }
+
+        #sold {
+            background-color: red;
+            color: white;
+            border: none;
+            width: 280px;
+            font-size: 25px;
+            margin-bottom: 5px;
+            border-radius: 8px;
+        }
+
+        p{
+            font-weight: 700;
+            color: red;
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 id="counter" style="text-align: center;"></h1>
+
+    <div id="container"></div>
+</body>
+<script>
+    var productArr = JSON.parse(localStorage.getItem("productList"));
+
+    var container = document.getElementById("container");
+
+    var counter = document.getElementById("counter");
+
+    counter.innerText = "Total Item : "  + productArr.length;
+
+    productArr.forEach(function (ele, i, arr) {
+        // var name = ele.name;
+        // var image = ele.image;
+        // var price = ele.price;
+        // var gender = ele.gender;
+        // var sold = ele.sold;
+
+
+        var name = document.createElement("h3");
+        name.innerText = ele.name;
+
+        var image = document.createElement("img");
+        image.src = ele.image;
+        image.id = "img"
+
+        var price = document.createElement("p");
+        price.innerText = "₹ " + ele.price;
+
+        var product = document.createElement("div");
+        product.id = "product";
+
+        var remove = document.createElement("button");
+        remove.id = "remove";
+        remove.innerText = "Remove"
+
+        var sold = document.createElement("button");
+        sold.id = "sold";
+        sold.innerText = "Sold";
+
+        if (ele.sold == "true") {
+            sold.style.backgroundColor = "red"
+        } else {
+            sold.style.backgroundColor = "green"
+        }
+
+
+        remove.addEventListener("click", function () {
+            productArr.splice(i, 1);
+            localStorage.setItem('productList', JSON.stringify(productArr));
+            alert("Item Removed");
+            window.location.reload();
+        })
+
+        sold.addEventListener("click", function () {
+            if (ele.sold == "true") {
+                ele.sold = "false";
+            } else {
+                ele.sold = "true";
+            }
+
+            if (ele.sold == "true") {
+                sold.style.backgroundColor = "red"
+            } else {
+                sold.style.backgroundColor = "green"
+            }
+
+            localStorage.setItem('productList', JSON.stringify(productArr));
+            window.location.reload();
+
+        })
+
+        product.append(image, name, price, remove, sold);
+
+        container.append(product)
+    })
+</script>
+
+</html>
